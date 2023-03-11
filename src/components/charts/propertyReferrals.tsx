@@ -1,6 +1,7 @@
-import React from 'react'
+import React from 'react';
+import { Typography, Box, Stack } from "@pankod/refine-mui";
 
-const propertyReferrals = () => {
+const PropertyReferrals = () => {
   return (
     <div>
       Property Referrals
@@ -8,4 +9,4 @@ const propertyReferrals = () => {
   )
 }
 
-export default propertyReferrals
+export default PropertyReferrals
