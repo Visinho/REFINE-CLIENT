@@ -1,6 +1,6 @@
 import React from 'react'
 
-const agentProfile = () => {
+const AgentProfile = () => {
   return (
     <div>
       Agent-Profile
@@ -8,4 +8,4 @@ const agentProfile = () => {
   )
 }
 
-export default agentProfile
+export default AgentProfile;
