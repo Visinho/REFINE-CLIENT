@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Add } from '@mui/icons-material';
 import { useTable } from '@pankod/refine-core';
 import { Box, Stack, TextField, Typography, Select, MenuItem } from "@pankod/refine-mui";
@@ -17,8 +17,20 @@ const AllProperties = () => {
     filters, setFilters,
   } = useTable();
 
-
   const allProperties = data?.data ?? [];
+
+  const currentPrice = sorter.find((item) => item.field === "price") ?.order;
+
+  const toggleSort = (field: string) => {
+    setSorter([{ field, order: currentPrice === "asc" ? "desc" : "asc"}])
+  };
+
+  const currentFilterValues = useMemo(() => {
+    const logicalFilters = filters.flatMap((item) => ("field" in item ? item : []));
+    return {
+      title: logicalFilters.find((item) => item.field === "title")?.value || "",
+    }
+  }, [filters])
 
   if(isLoading) return <Typography>Loading...</Typography>
   if(isError) return <Typography>Error...</Typography>
@@ -33,8 +45,8 @@ const AllProperties = () => {
         <Box mb={2} mt={3} display="flex" width="84%" justifyContent="space-between" flexWrap="wrap">
           <Box display="flex" gap={2} flexWrap="wrap" mb={{ xs: "20px", sm: 0}}>
             <CustomButton 
-              title={`Sort Price`}
-              handleClick={() => {}}
+              title={`Sort Price ${currentPrice === "asc" ? "↑" : "↓"}`}
+              handleClick={() => { toggleSort("price")}}
               backgroundColor="#475be8"
               color='#fcfcfc'
             />
@@ -42,8 +54,16 @@ const AllProperties = () => {
               variant='outlined'
               color='info'
               placeholder='Search by title'
-              value=''
-              onChange={() => {}}
+              value={currentFilterValues.title}
+              onChange={(e) => {
+                setFilters([
+                  {
+                    field: "title",
+                    operator: "contains",
+                    value: e.currentTarget.value ? e.currentTarget.value : undefined
+                  }
+                ])
+              }}
             />
             <Select 
               variant='outlined' 
